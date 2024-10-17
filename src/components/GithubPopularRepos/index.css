@@ -1,0 +1,36 @@
+/* Write your CSS here */
+.popular-repos-bg-container {
+  display: flex;
+  background-color: #ffffff;
+  min-height: 100vh;
+  justify-content: center;
+}
+
+.responsive-container {
+  width: 90%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.main-heading {
+  font-family: Lobster;
+  font-weight: 500;
+  font-size: 36px;
+}
+
+.language-container {
+  list-style-type: none;
+  padding-left: 0px;
+  display: flex;
+}
+
+.repositories-container {
+  list-style-type: none;
+  padding-left: 0px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  width: 100%;
+  max-width: 800px;
+}
