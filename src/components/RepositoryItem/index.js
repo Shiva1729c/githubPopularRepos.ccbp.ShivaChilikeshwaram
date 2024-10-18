@@ -14,7 +14,7 @@ const RepositoryItem = props => {
   return (
     <li className="repository-item">
       <img src={avatarUrl} alt={name} className="language-avatar" />
-      <p className="language-name">{name}</p>
+      <h1 className="language-name">{name}</h1>
       <ul className="stats-container">
         <li className="stats">
           <img

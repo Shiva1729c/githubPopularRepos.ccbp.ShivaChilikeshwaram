@@ -33,19 +33,27 @@ class GithubPopularRepos extends Component {
   }
 
   getRepositories = async () => {
+    this.setState({apiStatus: activeStatusConstants.in_Progress})
     const {activeFilterId} = this.state
     const url = `https://apis.ccbp.in/popular-repos?language=${activeFilterId}`
     const response = await fetch(url)
-    const data = await response.json()
-    const formattedData = data.popular_repos.map(eachRepo => ({
-      avatarUrl: eachRepo.avatar_url,
-      forksCount: eachRepo.forks_count,
-      id: eachRepo.id,
-      issuesCount: eachRepo.issues_count,
-      name: eachRepo.name,
-      starsCount: eachRepo.stars_count,
-    }))
-    this.setState({repositoryList: formattedData})
+    if (response.ok === true) {
+      const data = await response.json()
+      const formattedData = data.popular_repos.map(eachRepo => ({
+        avatarUrl: eachRepo.avatar_url,
+        forksCount: eachRepo.forks_count,
+        id: eachRepo.id,
+        issuesCount: eachRepo.issues_count,
+        name: eachRepo.name,
+        starsCount: eachRepo.stars_count,
+      }))
+      this.setState({
+        repositoryList: formattedData,
+        apiStatus: activeStatusConstants.success,
+      })
+    } else {
+      this.setState({apiStatus: activeStatusConstants.failure})
+    }
   }
 
   updateActiveFilter = id => {
@@ -88,7 +96,31 @@ class GithubPopularRepos extends Component {
     </div>
   )
 
-  renderFailureView = () => {}
+  renderFailureView = () => (
+    <div className="failure-view-container">
+      <img
+        src="https://assets.ccbp.in/frontend/react-js/api-failure-view.png"
+        alt="failure view"
+        className="failure-view-img"
+      />
+      <p className="failure-message">Something Went Wrong</p>
+    </div>
+  )
+
+  renderApiStatus = () => {
+    const {apiStatus} = this.state
+
+    switch (apiStatus) {
+      case 'SUCCESS':
+        return this.renderRepositories()
+      case 'IN_PROGRESS':
+        return this.renderLoader()
+      case 'FAILURE':
+        return this.renderFailureView()
+      default:
+        return null
+    }
+  }
 
   render() {
     return (
@@ -96,7 +128,7 @@ class GithubPopularRepos extends Component {
         <div className="responsive-container">
           <h1 className="main-heading">Popular</h1>
           {this.renderLanguages()}
-          {this.renderRepositories()}
+          {this.renderApiStatus()}
         </div>
       </div>
     )
